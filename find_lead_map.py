@@ -23,7 +23,9 @@ import os
 import io
 import time
 import requests
-from flask import Flask, request, jsonify, render_template_string, send_file
+import secrets
+from flask import (Flask, request, jsonify, render_template_string, send_file,
+                  redirect, make_response)
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment
 
@@ -38,6 +40,31 @@ MAX_COMPETITORS = 5
 PAGES = 2
 
 app = Flask(__name__)
+
+# --------------------------- Access gate ----------------------------------
+# Set ACCESS_TOKEN to a long random string to lock the whole app (page + APIs).
+# Generate one with:  python -c "import secrets; print(secrets.token_urlsafe(32))"
+# Share the link as:  https://your-host/?key=THAT_TOKEN
+# If ACCESS_TOKEN is unset, the gate is OFF (handy for local dev).
+ACCESS_TOKEN = os.environ.get("ACCESS_TOKEN")
+
+
+@app.before_request
+def access_gate():
+    if not ACCESS_TOKEN:
+        return  # gate disabled
+    cookie = request.cookies.get("access", "")
+    if secrets.compare_digest(cookie, ACCESS_TOKEN):
+        return  # already let in
+    key = request.args.get("key", "")
+    if secrets.compare_digest(key, ACCESS_TOKEN):
+        # valid link: drop a cookie, then redirect to a clean URL so the
+        # token stops showing in the address bar / forward history
+        resp = make_response(redirect(request.path))
+        resp.set_cookie("access", ACCESS_TOKEN, max_age=60 * 60 * 24 * 30,
+                        httponly=True, samesite="Lax", secure=request.is_secure)
+        return resp
+    return ("Not found", 404)  # don't advertise that anything is here
 
 
 # --------------------------- Places API helpers ---------------------------
