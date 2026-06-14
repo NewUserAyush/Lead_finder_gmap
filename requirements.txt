@@ -1,4 +1,8 @@
-Flask
-requests
-openpyxl
+Flask>=3.1
+requests>=2.32
+openpyxl>=3.1
 gunicorn
+playwright>=1.58
+google-auth>=2.40
+google-api-python-client>=2.178
+google-analytics-data
