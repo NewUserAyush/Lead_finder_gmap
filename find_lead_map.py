@@ -33,6 +33,13 @@ from flask import (Flask, request, jsonify, render_template_string, send_file,
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment
 
+# Playwright stores its Chromium binary here. On Render the default ~/.cache path
+# is build-only and vanishes at runtime, so pin it to a folder under the project
+# source dir (persists into the running container). build.sh installs to the same path.
+os.environ.setdefault("PLAYWRIGHT_BROWSERS_PATH",
+                       os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                    ".playwright-browsers"))
+
 API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY")
 SEARCH_URL = "https://places.googleapis.com/v1/places:searchText"
 DETAIL_URL = "https://places.googleapis.com/v1/places/{pid}"
