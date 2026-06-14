@@ -1,0 +1,15 @@
+{
+  "client_name": "Acme Corp",
+  "domain": "acme.com",
+  "currency": "usd",
+  "before": { "start": "2025-06-01", "end": "2025-08-31", "label": "Jun–Aug 2025" },
+  "after":  { "start": "2026-03-01", "end": "2026-05-31", "label": "Mar–May 2026" },
+
+  "traffic_source": "dataforseo",
+  "location_code": 2840,
+  "ga4_property_id": "123456789",
+
+  "conv_rate": 0.028,
+  "aov": 210,
+  "kw_aio": [0, 6]
+}
