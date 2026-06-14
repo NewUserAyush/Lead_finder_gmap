@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: leadmap
+    runtime: python
+    buildCommand: bash build.sh
+    startCommand: gunicorn --bind 0.0.0.0:$PORT find_lead_map:app
+    envVars:
+      - key: GOOGLE_MAPS_API_KEY
+        sync: false
+      - key: ACCESS_TOKEN
+        sync: false
+      - key: DATAFORSEO_LOGIN
+        sync: false
+      - key: DATAFORSEO_PASSWORD
+        sync: false
+      - key: PLAYWRIGHT_BROWSERS_PATH
+        value: /opt/render/.cache/ms-playwright
