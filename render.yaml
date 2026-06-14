@@ -14,4 +14,4 @@ services:
       - key: DATAFORSEO_PASSWORD
         sync: false
       - key: PLAYWRIGHT_BROWSERS_PATH
-        value: /opt/render/.cache/ms-playwright
+        value: /opt/render/project/src/.playwright-browsers
